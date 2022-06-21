@@ -6,6 +6,7 @@ function Login() {
       <Content>
         <CTA>
           <CTALogoOne src='/assets/images/cta-logo-one.svg' alt='' />
+          <SignUp>GET ALL THERE</SignUp>
         </CTA>
         <BgImage />
       </Content>
@@ -69,6 +70,17 @@ const CTALogoOne = styled.img`
   min-height: 100px;
   max-width: 600px;
   width: 100%;
+`;
+
+const SignUp = styled.a`
+  font-weight: bold;
+  color: #f9f9f9;
+  background-color: #0063e5;
+  margin-bottom: 12px;
+  width: 100%;
+  letter-spacing: 1.4px;
+  font-size: 18px;
+  padding: 16.5px 0;
 `;
 
 export default Login;
