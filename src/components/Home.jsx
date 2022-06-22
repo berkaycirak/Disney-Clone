@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ImgSlider from './ImgSlider';
+import Recommends from './Recommends';
 import Viewers from './Viewers';
 
 function Home(props) {
@@ -7,6 +8,7 @@ function Home(props) {
     <Container>
       <ImgSlider />
       <Viewers />
+      <Recommends />
     </Container>
   );
 }

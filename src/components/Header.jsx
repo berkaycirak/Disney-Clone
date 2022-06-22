@@ -28,6 +28,7 @@ function Header() {
         navigate('/home');
       }
     });
+    //eslint-disable-next-line
   }, [userName]);
 
   const handleAuth = async () => {

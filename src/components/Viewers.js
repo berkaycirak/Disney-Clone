@@ -84,6 +84,14 @@ const Wrap = styled.div`
     height: 100%;
     position: absolute;
     inset: 0px;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+  }
+  &:hover {
+    video {
+      opacity: 1;
+    }
+    transform: scale(1.05);
   }
 `;
 
