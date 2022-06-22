@@ -1,28 +1,47 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useNavigate } from 'react-router-dom';
 import {
   selectUserName,
   selectUserEmail,
   selectUserPhoto,
   setUserLoginDetails,
+  setSignOutState,
 } from '../features/user/userSlice';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { db } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../firebase';
+
 import { toast } from 'react-toastify';
 
 function Header() {
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+  const navigate = useNavigate();
+
+  // This useEffect will be triggered when userName is changed.
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        navigate('/home');
+      }
+    });
+  }, [userName]);
 
   const handleAuth = async () => {
     try {
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-      toast.success('You are logged in');
+      if (!userName) {
+        const result = await signInWithPopup(auth, provider);
+        setUser(result.user);
+        toast.success('You are logged in');
+      } else if (userName) {
+        auth.signOut().then(() => {
+          dispatch(setSignOutState());
+          navigate('/');
+        });
+      }
     } catch (error) {
       toast.error("Couldn't authorized.");
     }
@@ -69,7 +88,12 @@ function Header() {
               <span>MOVIES</span>
             </a>
           </NavMenu>
-          <UserImg src={userPhoto} alt={userName} />
+          <SignOut>
+            <UserImg src={userPhoto} alt={userName} />
+            <DropDown>
+              <span onClick={handleAuth}>Sign out</span>
+            </DropDown>
+          </SignOut>
         </>
       )}
     </Nav>
@@ -189,8 +213,44 @@ const Login = styled.a`
 
 const UserImg = styled.img`
   height: 100%;
-  border-radius: 50%;
+`;
+
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 8px;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0, 0, 0 / 50%) 0px 0px 18px 0px;
   padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 100px;
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.5s;
+`;
+
+const SignOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  ${UserImg} {
+    border-radius: 50%;
+  }
+
+  &:hover {
+    ${DropDown} {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 `;
 
 export default Header;
