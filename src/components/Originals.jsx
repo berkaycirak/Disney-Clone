@@ -1,44 +1,24 @@
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectOriginal } from '../features/movie/movieSlice';
 
 function Originals(props) {
+  const movies = useSelector(selectOriginal);
   return (
     <Container>
       <h4>Originals</h4>
       <Content>
-        <Wrap>
-          <Link to='/'>
-            <img
-              src='https://images.unsplash.com/photo-1556950961-8c092986258e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZGlzbmV5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-              alt=''
-            />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to='/'>
-            <img
-              src='https://images.unsplash.com/photo-1556950961-8c092986258e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZGlzbmV5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-              alt=''
-            />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to='/'>
-            <img
-              src='https://images.unsplash.com/photo-1556950961-8c092986258e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZGlzbmV5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-              alt=''
-            />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to='/'>
-            <img
-              src='https://images.unsplash.com/photo-1556950961-8c092986258e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZGlzbmV5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-              alt=''
-            />
-          </Link>
-        </Wrap>
+        {movies &&
+          movies.map((movie, key) => (
+            <Wrap key={key}>
+              {movie.id}
+              <Link to={'/detail/' + movie.id}>
+                <img src={movie.cardImg} alt={movie.title} />
+              </Link>
+            </Wrap>
+          ))}
       </Content>
     </Container>
   );

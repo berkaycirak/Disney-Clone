@@ -21,6 +21,7 @@ import {
   query,
   getDocs,
 } from 'firebase/firestore';
+import Trendings from './Trendings';
 
 function Home(props) {
   // When we add data into firebase, we can delete below useEffect.
@@ -91,6 +92,7 @@ function Home(props) {
       <Recommends />
       <NewDisney />
       <Originals />
+      <Trendings />
     </Container>
   );
 }
