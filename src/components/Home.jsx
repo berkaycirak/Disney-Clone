@@ -6,7 +6,7 @@ import Recommends from './Recommends';
 import Viewers from './Viewers';
 // import { addCollectionAndDocuments } from '../firebase';
 // import data from '../disneyPlusMoviesData';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { db } from '../firebase';
 import { setMovies } from '../features/movie/movieSlice';
@@ -37,7 +37,6 @@ function Home(props) {
               ...recommends,
               { id: item.data().id, ...item.data() },
             ];
-            console.log('hello');
 
             break;
 
@@ -67,8 +66,8 @@ function Home(props) {
         })
       );
     });
-  }, []);
-  console.log(trendings);
+  }, [userName]);
+
   return (
     <Container>
       <ImgSlider />
