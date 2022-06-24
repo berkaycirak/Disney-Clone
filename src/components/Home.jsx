@@ -56,7 +56,7 @@ function Home(props) {
             console.log('Hello');
         }
       });
-      console.log(recommends);
+
       dispatch(
         setMovies({
           recommend: recommends,
