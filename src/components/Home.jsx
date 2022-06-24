@@ -6,21 +6,12 @@ import Recommends from './Recommends';
 import Viewers from './Viewers';
 // import { addCollectionAndDocuments } from '../firebase';
 // import data from '../disneyPlusMoviesData';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { db } from '../firebase';
 import { setMovies } from '../features/movie/movieSlice';
 import { selectUserName } from '../features/user/userSlice';
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  writeBatch,
-  query,
-  getDocs,
-} from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Trendings from './Trendings';
 
 function Home(props) {
@@ -37,42 +28,36 @@ function Home(props) {
   let trendings = [];
 
   useEffect(() => {
-    const getCategoriesAndDocuments = async () => {
-      const collectionRef = collection(db, 'movies');
-      const q = query(collectionRef);
-
-      const querySnapshot = await getDocs(q);
-      const categoryMap = querySnapshot.docs.map((docSnapshot) => {
-        switch (docSnapshot.data().type) {
+    const collectionRef = collection(db, 'movies');
+    onSnapshot(collectionRef, (snapshot) => {
+      snapshot.docs.map((item) => {
+        switch (item.data().type) {
           case 'recommend':
             recommends = [
               ...recommends,
-              { id: docSnapshot.data().id, ...docSnapshot.data() },
+              { id: item.data().id, ...item.data() },
             ];
+            console.log('hello');
+
             break;
 
           case 'new':
             newDisneys = [
               ...newDisneys,
-              { id: docSnapshot.data().id, ...docSnapshot.data() },
+              { id: item.data().id, ...item.data() },
             ];
             break;
           case 'original':
-            originals = [
-              ...originals,
-              { id: docSnapshot.data().id, ...docSnapshot.data() },
-            ];
+            originals = [...originals, { id: item.data().id, ...item.data() }];
             break;
           case 'trending':
-            trendings = [
-              ...trendings,
-              { id: docSnapshot.data().id, ...docSnapshot.data() },
-            ];
+            trendings = [...trendings, { id: item.data().id, ...item.data() }];
             break;
           default:
             console.log('Hello');
         }
       });
+      console.log(recommends);
       dispatch(
         setMovies({
           recommend: recommends,
@@ -81,10 +66,9 @@ function Home(props) {
           trending: trendings,
         })
       );
-    };
-    getCategoriesAndDocuments();
-  }, [userName]);
-
+    });
+  }, []);
+  console.log(trendings);
   return (
     <Container>
       <ImgSlider />

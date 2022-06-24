@@ -13,8 +13,8 @@ function Trendings(props) {
         {movies &&
           movies.map((movie, key) => (
             <Wrap key={key}>
-              {movie.id}
-              <Link to={'/detail/' + movie.id}>
+              {movie.title}
+              <Link to={'/detail/' + movie.title.toLowerCase()}>
                 <img src={movie.cardImg} alt={movie.title} />
               </Link>
             </Wrap>
